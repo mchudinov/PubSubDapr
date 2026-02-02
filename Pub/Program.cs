@@ -44,6 +44,8 @@ public class Program
             builder.Logging.AddSerilog(logger);
 
             builder.AddServiceDefaults();
+            builder.Services.AddDaprClient();
+            builder.Services.AddDapr();
             builder.Services.AddHostedService<PublisherWorker>();
 
             var app = builder.Build();
