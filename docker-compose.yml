@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  web:
+    build:      
+      context: .
+      dockerfile: Web/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  # webadmin:
+  #   build:      
+  #     context: .
+  #     dockerfile: WebAdmin/Dockerfile
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     - DOTNET_ENVIRONMENT=Development
+  #     - ASPNETCORE_ENVIRONMENT=Development

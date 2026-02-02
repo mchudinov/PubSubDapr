@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Pub/Pub.csproj" />
+  <Project Path="PubSubDapr.AppHost/PubSubDapr.AppHost.csproj" Id="1fbb9ea6-1a05-4d91-b240-dd57c9099453" />
+  <Project Path="PubSubDapr.ServiceDefaults/PubSubDapr.ServiceDefaults.csproj" />
+</Solution>
