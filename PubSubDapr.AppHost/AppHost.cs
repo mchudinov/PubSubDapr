@@ -14,7 +14,10 @@ builder.AddProject<Projects.Pub>("pub")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "publisher",
-        Config = ".\\.dapr\\components"
+        Config = ".\\.dapr\\components",
+        DaprGrpcPort = 59004,
+        DaprHttpPort = 59005,
+        LogLevel = "Debug"
     })
     .WithEnvironment("AzureServiceBus__ConnectionString", "Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;")
     .WaitFor(serviceBus);
