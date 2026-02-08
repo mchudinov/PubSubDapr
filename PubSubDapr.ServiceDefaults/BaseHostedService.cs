@@ -22,12 +22,12 @@ public abstract class BaseHostedWorker : IHostedService, IDisposable
         _workerPeriodSeconds = int.TryParse(configuration[$"{WorkerName}:WorkerPeriodSeconds"], out int result) ? result : _workerPeriodSeconds;
     }
 
-    protected abstract void DoWork(object state);
+    protected abstract Task DoWork(object state);
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Starting {WorkerName} worker", WorkerName);
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(_workerPeriodSeconds));
+        _timer = new Timer(async state => await DoWork(state), null, TimeSpan.Zero, TimeSpan.FromSeconds(_workerPeriodSeconds));
         return Task.CompletedTask;
     }
 
