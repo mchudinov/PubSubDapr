@@ -21,7 +21,7 @@ public class PublisherWorker : BaseHostedWorker
 
         try
         {
-            await _daprClient.PublishEventAsync("servicebus", "messages", "Hello world");
+            await _daprClient.PublishEventAsync("servicebus", "topic", "Hello world!");
             _logger.LogInformation("Message 'Hello world' published to service bus.");
         }
         catch (Exception ex)
