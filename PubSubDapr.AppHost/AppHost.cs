@@ -1,10 +1,10 @@
 using CommunityToolkit.Aspire.Hosting.Dapr;
-using Microsoft.AspNetCore.Components.Rendering;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 var serviceBus = builder.AddAzureServiceBus("servicebus")
     .RunAsEmulator();
+
 var topic = serviceBus.AddServiceBusTopic("topic");
 topic.AddServiceBusSubscription("subscription");
 
@@ -21,6 +21,8 @@ builder.AddProject<Projects.Pub>("pub")
            //})
            .WithDaprSidecar(new DaprSidecarOptions
            {
+               //Config = ".\\.dapr\\config.yaml", // Path to your Dapr config file (if any)
+               //ComponentsPath = ".\\.dapr\\components", // Path to your components directory
                Config = ".\\.dapr\\components",
                AppId = "my-app-id",
                DaprGrpcPort = 50001,
