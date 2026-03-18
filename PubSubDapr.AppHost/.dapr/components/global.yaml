@@ -1,0 +1,24 @@
+# dapr/configuration/global_config.yaml
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: global_config
+spec:
+  tracing:
+    samplingRate: "1"
+    otel:
+      endpointAddress: "http://localhost:4317"
+  metric:
+    enabled: true
+  # features:
+  # - name: Workflow
+  #   enabled: true
+  accessControl:
+    # defaultAction: allow
+    # namespace: default
+    # trustDomain: public
+    policies:
+    - appId: pub-app-id
+      defaultAction: allow
+      namespace: default
+      trustDomain: public

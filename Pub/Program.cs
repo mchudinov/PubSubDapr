@@ -56,6 +56,8 @@ public class Program
                 app.UseExceptionHandler("/Error");
             }
 
+            app.MapGet("/", () => "Pub");
+
             app.Run();
         }
         catch (Exception ex)
