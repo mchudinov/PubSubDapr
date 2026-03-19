@@ -8,5 +8,4 @@ spec:
   version: v1
   metadata:
     - name: connectionString
-      value: "Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;"
-      # env: AzureServiceBus__ConnectionString
+      env: AzureServiceBus__ConnectionString
