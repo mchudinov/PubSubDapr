@@ -5,6 +5,7 @@
 
 .vscode/
 .dotnet/
+.dapr/generated/
 appsettings.Development*.json
 helm/chart/*
 helm/values.*.yaml
