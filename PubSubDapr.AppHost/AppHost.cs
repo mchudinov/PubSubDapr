@@ -65,4 +65,6 @@ builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, asyn
         ct);
 });
 
+builder.AddProject<Projects.Sub>("sub");
+
 builder.Build().Run();
