@@ -47,3 +47,7 @@ AppHost (Aspire orchestrator)
   └─ Pub Worker ──► Dapr sidecar ──► Azure Service Bus
                     (app-id: pub-app-id, port 3500)   (component: servicebus_pubsub)
 ```
+
+## Rules
+
+Always use Context7 when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.

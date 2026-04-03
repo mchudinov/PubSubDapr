@@ -8,4 +8,4 @@ spec:
   version: v1
   metadata:
     - name: connectionString
-      env: AzureServiceBus__ConnectionString
+      value: "{env:AzureServiceBus__ConnectionString}"
