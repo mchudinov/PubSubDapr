@@ -37,16 +37,13 @@ builder.AddProject<Projects.Pub>("pub")
 
 // The CommunityToolkit Dapr integration launches daprd through its own lifecycle hook,
 // bypassing Aspire's env-var pipeline. Instead, generate pubsub.yaml on disk before
-// daprd reads it. 'UseDevelopmentEmulator=true' is stripped because Dapr's Go Azure
-// SDK doesn't recognise it and fails to parse the connection string.
+// daprd reads it. The full connection string including 'UseDevelopmentEmulator=true'
+// is required so Dapr's Go Azure SDK connects without TLS to the local emulator
+// (azure-sdk-for-go/azservicebus v1.7.0+ supports the flag; Dapr 1.14+ ships with it).
 builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, async (_, ct) =>
 {
     var cs = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(ct);
     if (cs is null) return;
-
-    var stripped = string.Join(";", cs.Split(';')
-        .Where(p => !string.IsNullOrEmpty(p) &&
-                    !p.StartsWith("UseDevelopmentEmulator", StringComparison.OrdinalIgnoreCase)));
 
     await File.WriteAllTextAsync(
         Path.Combine(generatedPath, "pubsub.yaml"),
@@ -61,7 +58,7 @@ builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, asyn
           version: v1
           metadata:
             - name: connectionString
-              value: "{stripped}"
+              value: "{cs}"
             - name: disableEntityManagement
               value: "true"
         """,
