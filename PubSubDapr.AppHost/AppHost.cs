@@ -28,8 +28,6 @@ builder.AddProject<Projects.Pub>("pub")
             Config = daprConfigPath,
             EnableApiLogging = true
         });
-        // daprd is a separate process with its own environment.
-        // Inject the emulator connection string so pubsub.yaml can read it via `env:`.
         sidecar.Resource.Annotations.Add(new EnvironmentCallbackAnnotation(async context =>
         {
             var connStr = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(context.CancellationToken);
