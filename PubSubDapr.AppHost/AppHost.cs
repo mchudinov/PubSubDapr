@@ -31,8 +31,6 @@ builder.AddProject<Projects.Pub>("pub")
         // Inject the emulator connection string so pubsub.yaml can read it via `env:`.
         sidecar.Resource.Annotations.Add(new EnvironmentCallbackAnnotation(async context =>
         {
-            //var connStr = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(context.CancellationToken);
-            //context.EnvironmentVariables["AzureServiceBus__ConnectionString"] = connStr ?? string.Empty;
             var connStr = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(context.CancellationToken);
             if (connStr is not null)
             {
