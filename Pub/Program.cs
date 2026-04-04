@@ -18,7 +18,7 @@ public class Program
 
         try
         {
-            Serilog.Log.Logger.Information("Overlege worker is running");
+            Serilog.Log.Logger.Information("Publisher is running");
             Serilog.Log.Logger.Debug($".NET Version: {Environment.Version}");
             Serilog.Log.Logger.Debug("► Environment variables");
             Environment.GetEnvironmentVariables().OutputEnvironmentVariables();
