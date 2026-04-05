@@ -7,7 +7,7 @@ spec:
   tracing:
     samplingRate: "1"
     otel:
-      endpointAddress: "http://localhost:4317"
+      endpointAddress: "http://localhost:18889"
   metrics:
     enabled: true
   # features:

@@ -3,7 +3,10 @@ using CommunityToolkit.Aspire.Hosting.Dapr;
 var builder = DistributedApplication.CreateBuilder(args);
 
 var serviceBus = builder.AddAzureServiceBus("servicebus")
-    .RunAsEmulator();
+    .RunAsEmulator(emulator =>
+    {
+        emulator.WithHostPort(55555);
+    });
 
 var topic = serviceBus.AddServiceBusTopic("topic");
 topic.AddServiceBusSubscription("subscription");
