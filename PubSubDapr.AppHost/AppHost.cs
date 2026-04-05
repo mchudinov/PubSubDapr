@@ -59,6 +59,8 @@ builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, asyn
           metadata:
             - name: connectionString
               value: "{cs}"
+            - name: consumerID
+              value: "subscription"
             - name: disableEntityManagement
               value: "true"
         """,
@@ -72,10 +74,10 @@ builder.AddProject<Projects.Sub>("sub")
         sidecar.WithOptions(new DaprSidecarOptions
         {
             AppId = "sub-app-id",
-            AppPort = 8082,
-            DaprGrpcPort = 50001,
-            DaprHttpPort = 3500,
-            MetricsPort = 9090,
+            AppPort = 8083,
+            DaprGrpcPort = 50002,
+            DaprHttpPort = 3501,
+            MetricsPort = 9091,
             ResourcesPaths = [generatedPath],
             PlacementHostAddress = "",
             LogLevel = "Debug",

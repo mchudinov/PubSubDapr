@@ -1,28 +1,22 @@
-﻿using PubSubDapr.ServiceDefaults;
+using PubSubDapr.ServiceDefaults;
 
 namespace Sub;
 
 public class SubscriberWorker(
-    IConfiguration configuration, 
-    ILogger<SubscriberWorker> logger, 
-    Dapr.Client.DaprClient daprClient) : BaseHostedWorker(configuration, logger)
+    IConfiguration configuration,
+    ILogger<SubscriberWorker> logger) : BaseHostedWorker(configuration, logger)
 {
     protected override string WorkerName { get => "Subscriber"; }
-    public static long ExecutionTime { get; private set; }
 
-    private readonly Dapr.Client.DaprClient _daprClient = daprClient;
-
-    protected override async Task DoWork(object state)
+    protected override Task DoWork(object state)
     {
-        _logger.LogInformation("Subscriber worker is working.");
+        _logger.LogInformation("Subscriber is ready for messages.");
+        return Task.CompletedTask;
+    }
 
-        //try
-        //{
-        //    _logger.LogInformation("Subscribed to service bus.");
-        //}
-        //catch (Exception ex)
-        //{
-        //    _logger.LogError($"Error: {ex.Message}");
-        //}
+    public Task HandleMessageAsync(string message)
+    {
+        _logger.LogInformation("Received message from topic: {Message}", message);
+        return Task.CompletedTask;
     }
 }

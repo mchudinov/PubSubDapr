@@ -45,7 +45,8 @@ public class Program
 
             builder.AddServiceDefaults();
             builder.Services.AddDaprClient();
-            builder.Services.AddHostedService<SubscriberWorker>();
+            builder.Services.AddSingleton<SubscriberWorker>();
+            builder.Services.AddHostedService(sp => sp.GetRequiredService<SubscriberWorker>());
 
             var app = builder.Build();
             app.MapDefaultEndpoints();
@@ -55,6 +56,16 @@ public class Program
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseCloudEvents();
+            app.MapSubscribeHandler();
+
+            app.MapPost("/topic", async (string message, SubscriberWorker worker) =>
+                {
+                    await worker.HandleMessageAsync(message);
+                    return Results.Ok();
+                })
+                .WithTopic("servicebus_pubsub", "topic");
 
             app.MapGet("/", () => "Ыги");
 
