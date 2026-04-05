@@ -15,6 +15,8 @@ topic1.AddServiceBusSubscription("subscription1");
 // Add the Service Bus Emulator UI
 builder.AddAsbEmulatorUi("asb-ui", serviceBus);
 
+var cache = builder.AddRedis("cache");
+
 var daprPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr\\components");
 var daprConfigPath = Path.Combine(daprPath, "global.yaml");
 
