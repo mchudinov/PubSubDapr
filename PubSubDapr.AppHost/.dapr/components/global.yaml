@@ -13,12 +13,13 @@ spec:
   # features:
   # - name: Workflow
   #   enabled: true
-  accessControl:
-    # defaultAction: allow
-    # namespace: default
-    # trustDomain: public
+  accessControl:    
     policies:
     - appId: pub-app-id
       defaultAction: allow
       namespace: default
       trustDomain: public
+    - appId: sub-app-id
+      defaultAction: allow
+      namespace: default
+      trustDomain: public      

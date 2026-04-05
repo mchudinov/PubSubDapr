@@ -16,13 +16,13 @@ public class SubscriberWorker(
     {
         _logger.LogInformation("Subscriber worker is working.");
 
-        try
-        {
-            _logger.LogInformation("Message 'Hello world' subscribed to service bus.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-        }
+        //try
+        //{
+        //    _logger.LogInformation("Subscribed to service bus.");
+        //}
+        //catch (Exception ex)
+        //{
+        //    _logger.LogError($"Error: {ex.Message}");
+        //}
     }
 }
