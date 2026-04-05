@@ -1,0 +1,41 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {"type":"text","id":"title","x":380,"y":18,"width":10,"height":26,"text":"PubSubDapr — Data Flow","fontSize":26,"strokeColor":"#1e1e1e","fillStyle":"solid","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":1},
+    {"type":"rectangle","id":"pubZone","x":15,"y":85,"width":390,"height":225,"backgroundColor":"#dbe4ff","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#4a9eed","strokeWidth":1,"opacity":50,"roughness":1,"angle":0,"groupIds":[],"seed":2},
+    {"type":"text","id":"pubZoneLabel","x":25,"y":93,"width":10,"height":16,"text":"Pub Service  :8082","fontSize":16,"strokeColor":"#1e1e1e","fillStyle":"solid","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":3},
+    {"type":"rectangle","id":"pw","x":30,"y":148,"width":165,"height":80,"backgroundColor":"#a5d8ff","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#4a9eed","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":4,"label":{"text":"PublisherWorker\nDoWork() / 5s","fontSize":16,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_pw_ps","x":195,"y":188,"width":50,"height":0,"points":[[0,0],[50,0]],"endArrowhead":"arrow","strokeColor":"#8b5cf6","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":5,"label":{"text":"gRPC","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"ps","x":245,"y":148,"width":150,"height":80,"backgroundColor":"#d0bfff","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#8b5cf6","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":6,"label":{"text":"pub-app-id\ngRPC :50001\nHTTP :3500","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"asbZone","x":420,"y":85,"width":215,"height":225,"backgroundColor":"#d3f9d8","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#22c55e","strokeWidth":1,"opacity":50,"roughness":1,"angle":0,"groupIds":[],"seed":7},
+    {"type":"text","id":"asbZoneLabel","x":428,"y":93,"width":10,"height":14,"text":"Service Bus Emulator  :55555","fontSize":14,"strokeColor":"#1e1e1e","fillStyle":"solid","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":8},
+    {"type":"arrow","id":"a_ps_asb","x":395,"y":188,"width":40,"height":0,"points":[[0,0],[40,0]],"endArrowhead":"arrow","strokeColor":"#22c55e","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":9,"label":{"text":"AMQP publish","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"asb","x":435,"y":125,"width":185,"height":125,"backgroundColor":"#b2f2bb","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#22c55e","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":10,"label":{"text":"Azure Service Bus\ntopic1\nsubscription1","fontSize":16,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"subZone","x":650,"y":85,"width":375,"height":225,"backgroundColor":"#e5dbff","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#8b5cf6","strokeWidth":1,"opacity":50,"roughness":1,"angle":0,"groupIds":[],"seed":11},
+    {"type":"text","id":"subZoneLabel","x":660,"y":93,"width":10,"height":16,"text":"Sub Service  :8083","fontSize":16,"strokeColor":"#1e1e1e","fillStyle":"solid","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":12},
+    {"type":"arrow","id":"a_asb_ss","x":620,"y":188,"width":35,"height":0,"points":[[0,0],[35,0]],"endArrowhead":"arrow","strokeColor":"#22c55e","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":13,"label":{"text":"AMQP push","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"ss","x":655,"y":148,"width":155,"height":80,"backgroundColor":"#d0bfff","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#8b5cf6","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":14,"label":{"text":"sub-app-id\ngRPC :50002\nHTTP :3501","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_ss_sw","x":810,"y":188,"width":45,"height":0,"points":[[0,0],[45,0]],"endArrowhead":"arrow","strokeColor":"#8b5cf6","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":15,"label":{"text":"POST /topic1\nCloudEvent","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"sw","x":855,"y":148,"width":155,"height":80,"backgroundColor":"#a5d8ff","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#4a9eed","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":16,"label":{"text":"SubscriberWorker\nHandleMessageAsync","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_sw_log","x":932,"y":148,"width":0,"height":-45,"points":[[0,0],[0,-45]],"endArrowhead":"arrow","strokeColor":"#f59e0b","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":17},
+    {"type":"rectangle","id":"log","x":855,"y":65,"width":155,"height":40,"backgroundColor":"#fff3bf","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#f59e0b","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":18,"label":{"text":"LogInformation","fontSize":15,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"ahZone","x":15,"y":348,"width":990,"height":195,"backgroundColor":"#fff3bf","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#f59e0b","strokeWidth":1,"opacity":50,"roughness":1,"angle":0,"groupIds":[],"seed":19},
+    {"type":"text","id":"ahLabel","x":25,"y":355,"width":10,"height":18,"text":"AppHost (Aspire Orchestrator) — startup","fontSize":18,"strokeColor":"#1e1e1e","fillStyle":"solid","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":20},
+    {"type":"rectangle","id":"evt","x":30,"y":393,"width":220,"height":60,"backgroundColor":"#ffc9c9","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#ef4444","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":21,"label":{"text":"BeforeResourceStartedEvent\n(ServiceBus ready)","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_evt_yaml","x":250,"y":423,"width":95,"height":0,"points":[[0,0],[95,0]],"endArrowhead":"arrow","strokeColor":"#f59e0b","strokeWidth":2,"roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":22,"label":{"text":"writes","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"rectangle","id":"yaml","x":345,"y":393,"width":265,"height":60,"backgroundColor":"#ffd8a8","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#f59e0b","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":23,"label":{"text":".dapr/generated/pubsub.yaml\nconnectionString + consumerID","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_yaml_ps","x":477,"y":393,"width":-157,"height":-165,"points":[[0,0],[-157,-165]],"endArrowhead":"arrow","strokeColor":"#8b5cf6","strokeWidth":1,"strokeStyle":"dashed","roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":24,"label":{"text":"loaded by daprd","fontSize":13,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_yaml_ss","x":477,"y":393,"width":255,"height":-165,"points":[[0,0],[255,-165]],"endArrowhead":"arrow","strokeColor":"#8b5cf6","strokeWidth":1,"strokeStyle":"dashed","roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":25},
+    {"type":"rectangle","id":"asbui","x":730,"y":393,"width":165,"height":60,"backgroundColor":"#c3fae8","fillStyle":"solid","roundness":{"type":3},"strokeColor":"#06b6d4","strokeWidth":2,"opacity":100,"roughness":1,"angle":0,"groupIds":[],"seed":26,"label":{"text":"asb-ui\n(Service Bus UI)","fontSize":14,"strokeColor":"#1e1e1e"}},
+    {"type":"arrow","id":"a_ah_asb","x":527,"y":348,"width":0,"height":-98,"points":[[0,0],[0,-98]],"endArrowhead":"arrow","strokeColor":"#22c55e","strokeWidth":1,"strokeStyle":"dashed","roughness":1,"opacity":100,"angle":0,"groupIds":[],"seed":27,"label":{"text":"provisions topic1/sub1","fontSize":13,"strokeColor":"#1e1e1e"}}
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "zoom": {"value": 1},
+    "scrollX": 20,
+    "scrollY": 20
+  },
+  "files": {}
+}
