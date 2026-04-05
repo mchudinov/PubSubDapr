@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
@@ -60,20 +61,20 @@ public class Program
             app.UseCloudEvents();
             app.MapSubscribeHandler();
 
-            app.MapPost("/topic", async (string message, SubscriberWorker worker) =>
+            app.MapPost("/topic", async ([FromBody] string message, SubscriberWorker worker) =>
                 {
                     await worker.HandleMessageAsync(message);
                     return Results.Ok();
                 })
                 .WithTopic("servicebus_pubsub", "topic");
 
-            app.MapGet("/", () => "Ыги");
+            app.MapGet("/", () => "Subscriber");
 
             app.Run();
         }
         catch (Exception ex)
         {
-            Serilog.Log.Fatal($"Overlege worker process terminated unexpectedly. Error: {ex.Message}");
+            Serilog.Log.Fatal($"Subscriber process terminated unexpectedly. Error: {ex.Message}");
         }
         finally
         {
