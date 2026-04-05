@@ -65,6 +65,24 @@ builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, asyn
         ct);
 });
 
-builder.AddProject<Projects.Sub>("sub");
+builder.AddProject<Projects.Sub>("sub")
+    .WithEnvironment("AzureServiceBus__ConnectionString", serviceBus.Resource.ConnectionStringExpression)
+    .WithDaprSidecar(sidecar =>
+    {
+        sidecar.WithOptions(new DaprSidecarOptions
+        {
+            AppId = "sub-app-id",
+            AppPort = 8082,
+            DaprGrpcPort = 50001,
+            DaprHttpPort = 3500,
+            MetricsPort = 9090,
+            ResourcesPaths = [generatedPath],
+            PlacementHostAddress = "",
+            LogLevel = "Debug",
+            Config = daprConfigPath,
+            EnableApiLogging = true
+        });
+    })
+    .WaitFor(serviceBus);
 
 builder.Build().Run();
