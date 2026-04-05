@@ -6,10 +6,14 @@ var serviceBus = builder.AddAzureServiceBus("servicebus")
     .RunAsEmulator(emulator =>
     {
         emulator.WithHostPort(55555);
+        emulator.WithLifetime(ContainerLifetime.Persistent);
     });
 
-var topic = serviceBus.AddServiceBusTopic("topic");
-topic.AddServiceBusSubscription("subscription");
+var topic1 = serviceBus.AddServiceBusTopic("topic1");
+topic1.AddServiceBusSubscription("subscription1");
+
+// Add the Service Bus Emulator UI
+builder.AddAsbEmulatorUi("asb-ui", serviceBus);
 
 var daprPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr\\components");
 var daprConfigPath = Path.Combine(daprPath, "global.yaml");
@@ -43,7 +47,7 @@ builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, asyn
             - name: connectionString
               value: "{connectionString}"
             - name: consumerID
-              value: "subscription"
+              value: "subscription1"
             - name: disableEntityManagement
               value: "true"
         """,

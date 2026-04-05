@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
@@ -61,12 +60,14 @@ public class Program
             app.UseCloudEvents();
             app.MapSubscribeHandler();
 
-            app.MapPost("/topic", async ([FromBody] string message, SubscriberWorker worker) =>
+            app.MapPost("/topic1", async (HttpRequest request, SubscriberWorker worker) =>
                 {
+                    using var reader = new StreamReader(request.Body);
+                    var message = await reader.ReadToEndAsync();
                     await worker.HandleMessageAsync(message);
                     return Results.Ok();
                 })
-                .WithTopic("servicebus_pubsub", "topic");
+                .WithTopic("servicebus_pubsub", "topic1");
 
             app.MapGet("/", () => "Subscriber");
 
