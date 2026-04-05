@@ -22,4 +22,4 @@ spec:
     - appId: sub-app-id
       defaultAction: allow
       namespace: default
-      trustDomain: public      
+      trustDomain: public
