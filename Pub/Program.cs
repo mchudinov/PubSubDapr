@@ -56,13 +56,13 @@ public class Program
                 app.UseExceptionHandler("/Error");
             }
 
-            app.MapGet("/", () => "Pub");
+            app.MapGet("/", () => "Publisher");
 
             app.Run();
         }
         catch (Exception ex)
         {
-            Serilog.Log.Fatal($"Overlege worker process terminated unexpectedly. Error: {ex.Message}");
+            Serilog.Log.Fatal($"Publisher process terminated unexpectedly. Error: {ex.Message}");
         }
         finally
         {
