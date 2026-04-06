@@ -89,7 +89,7 @@ builder.AddProject<Projects.Pub>("pub")
             DaprHttpPort = 3500,
             MetricsPort = 9090,
             ResourcesPaths = [daprConfigPath, daprGeneratedPath],
-            LogLevel = "Debug",
+            LogLevel = "Info",
             Config = daprGlobalConfigFile,
             EnableApiLogging = true
         });
@@ -108,7 +108,7 @@ builder.AddProject<Projects.Sub>("sub")
             MetricsPort = 9091,
             ResourcesPaths = [daprConfigPath, daprGeneratedPath],
             PlacementHostAddress = "localhost:6050",
-            LogLevel = "Debug",
+            LogLevel = "Info",
             Config = daprGlobalConfigFile,
             EnableApiLogging = true
         });
