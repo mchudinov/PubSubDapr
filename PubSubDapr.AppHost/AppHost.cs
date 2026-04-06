@@ -42,13 +42,15 @@ builder.Eventing.Subscribe<BeforeResourceStartedEvent>(cache.Resource, async (_,
     // Dapr Redis component expects host:port, password, and enableTLS as separate fields.
     var segments = cs.Split(',');
     var redisHost = segments[0];
-    var kvPairs = segments.Skip(1)
+    var redisPassword = segments.Skip(1)
         .Select(p => p.Split('=', 2))
-        .Where(kv => kv.Length == 2)
-        .ToDictionary(kv => kv[0].ToLowerInvariant(), kv => kv[1]);
-    var redisPassword = kvPairs.GetValueOrDefault("password", "");
-    var enableTls = kvPairs.GetValueOrDefault("ssl", "false")
-        .Equals("true", StringComparison.OrdinalIgnoreCase) ? "true" : "false";
+        .Where(kv => kv.Length == 2 && kv[0].Equals("password", StringComparison.OrdinalIgnoreCase))
+        .Select(kv => kv[1])
+        .FirstOrDefault() ?? "";
+    // The Aspire Redis container is a plain-TCP Redis (no TLS at the server level).
+    // Aspire's StackExchange.Redis client handles ssl=true with its own cert override;
+    // Dapr's Go-Redis client does not, so TLS must be disabled here.
+    const string enableTls = "false";
 
     await File.WriteAllTextAsync(
         Path.Combine(generatedPath, "statestore.yaml"),
