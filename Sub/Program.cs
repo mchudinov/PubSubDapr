@@ -46,6 +46,7 @@ public class Program
             builder.Logging.AddSerilog(logger);
 
             builder.AddServiceDefaults();
+            builder.Services.AddControllers().AddDapr();
             builder.Services.AddActors(options =>
             {
                 options.Actors.RegisterActor<MessageHandlerActor>();
@@ -65,16 +66,7 @@ public class Program
             app.UseCloudEvents();
             app.MapSubscribeHandler();
             app.MapActorsHandlers();
-
-            app.MapPost("/topic1", async (HttpRequest request, IActorProxyFactory proxyFactory) =>
-                {
-                    using var reader = new StreamReader(request.Body);
-                    var message = await reader.ReadToEndAsync();
-                    var actor = proxyFactory.CreateActorProxy<IMessageHandlerActor>(new ActorId(Guid.NewGuid().ToString()), "MessageHandlerActor");
-                    await actor.HandleMessageAsync(message);
-                    return Results.Ok();
-                })
-                .WithTopic("servicebus_pubsub", "topic1");
+            app.MapControllers();
 
             app.MapGet("/", () => "Subscriber");
 
