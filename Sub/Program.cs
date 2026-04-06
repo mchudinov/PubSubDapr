@@ -71,9 +71,24 @@ public class Program
                     using var reader = new StreamReader(request.Body);
                     var message = await reader.ReadToEndAsync();
                     var actor = proxyFactory.CreateActorProxy<IMessageHandlerActor>(
-                        new ActorId(Guid.NewGuid().ToString()),
+                        new ActorId("MessageHandlerActor"),
                         "MessageHandlerActor");
-                    await actor.HandleMessageAsync(message);
+
+                    var retries = 0;
+                    while (true)
+                    {
+                        try
+                        {
+                            await actor.HandleMessageAsync(message);
+                            break;
+                        }
+                        catch (Dapr.DaprApiException ex) when (
+                            ex.Message.Contains("did not find address for actor") && retries < 3)
+                        {
+                            retries++;
+                            await Task.Delay(TimeSpan.FromSeconds(retries));
+                        }
+                    }
                     return Results.Ok();
                 })
                 .WithTopic("servicebus_pubsub", "topic1");

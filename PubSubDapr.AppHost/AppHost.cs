@@ -15,95 +15,68 @@ topic1.AddServiceBusSubscription("subscription1");
 // Add the Service Bus Emulator UI
 builder.AddAsbEmulatorUi("asb-ui", serviceBus);
 
-var cache = builder.AddRedis("cache")
-    .WithRedisInsight()
-    .WithRedisCommander();
-
-var daprPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr\\components");
-var daprConfigPath = Path.Combine(daprPath, "global.yaml");
+var daprConfigPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr\\components");
+var daprGlobalConfigFile = Path.Combine(daprConfigPath, "global.yaml");
 
 // Component files are written here at startup; not tracked in git.
-var generatedPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr", "generated");
-Directory.CreateDirectory(generatedPath);
+var daprGeneratedPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr", "generated");
+Directory.CreateDirectory(daprGeneratedPath);
 
-// The CommunityToolkit Dapr integration launches daprd through its own lifecycle hook,
-// bypassing Aspire's env-var pipeline. Instead, generate pubsub.yaml on disk before
-// daprd reads it. The full connection string including 'UseDevelopmentEmulator=true'
-// is required so Dapr's Go Azure SDK connects without TLS to the local emulator
-// (azure-sdk-for-go/azservicebus v1.7.0+ supports the flag; Dapr 1.14+ ships with it).
-// Generate statestore.yaml for Redis so Dapr actors can persist state.
-// actorStateStore=true elects this as the actor state store.
-builder.Eventing.Subscribe<BeforeResourceStartedEvent>(cache.Resource, async (_, ct) =>
-{
-    var cs = await cache.Resource.ConnectionStringExpression.GetValueAsync(ct);
-    if (cs is null) return;
-
-    // Aspire Redis connection string: "host:port,password=xxx,ssl=true,..."
-    // Dapr Redis component expects host:port, password, and enableTLS as separate fields.
-    var segments = cs.Split(',');
-    var redisHost = segments[0];
-    var redisPassword = segments.Skip(1)
-        .Select(p => p.Split('=', 2))
-        .Where(kv => kv.Length == 2 && kv[0].Equals("password", StringComparison.OrdinalIgnoreCase))
-        .Select(kv => kv[1])
-        .FirstOrDefault() ?? "";
-    // The Aspire Redis container is a plain-TCP Redis (no TLS at the server level).
-    // Aspire's StackExchange.Redis client handles ssl=true with its own cert override;
-    // Dapr's Go-Redis client does not, so TLS must be disabled here.
-    const string enableTls = "false";
-
-    await File.WriteAllTextAsync(
-        Path.Combine(generatedPath, "statestore.yaml"),
-        $"""
-        apiVersion: dapr.io/v1alpha1
-        kind: Component
-        metadata:
-          name: statestore
-          namespace: default
-        spec:
-          type: state.redis
-          version: v1
-          metadata:
-            - name: redisHost
-              value: "{redisHost}"
-            - name: redisPassword
-              value: "{redisPassword}"
-            - name: enableTLS
-              value: "{enableTls}"
-            - name: actorStateStore
-              value: "true"
-        scopes:
-          - sub-app-id
-        """,
-        ct);
-});
-
+//// The CommunityToolkit Dapr integration launches daprd through its own lifecycle hook,
+//// bypassing Aspire's env-var pipeline. Instead, generate pubsub.yaml on disk before
+//// daprd reads it. The full connection string including 'UseDevelopmentEmulator=true'
+//// is required so Dapr's Go Azure SDK connects without TLS to the local emulator
+//// (azure-sdk-for-go/azservicebus v1.7.0+ supports the flag; Dapr 1.14+ ships with it).
 builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, async (_, ct) =>
 {
-    var connectionString = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(ct);
-    if (connectionString is null) return;
+   var connectionString = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(ct);
+   if (connectionString is null) return;
 
-    await File.WriteAllTextAsync(
-        Path.Combine(generatedPath, "pubsub.yaml"),
-        $"""
-        apiVersion: dapr.io/v1alpha1
-        kind: Component
-        metadata:
-          name: servicebus_pubsub
-          namespace: default
-        spec:
-          type: pubsub.azure.servicebus
-          version: v1
-          metadata:
-            - name: connectionString
-              value: "{connectionString}"
-            - name: consumerID
-              value: "subscription1"
-            - name: disableEntityManagement
-              value: "true"
-        """,
-        ct);
+   await File.WriteAllTextAsync(
+       Path.Combine(daprGeneratedPath, "pubsub.yaml"),
+       $"""
+       apiVersion: dapr.io/v1alpha1
+       kind: Component
+       metadata:
+         name: servicebus_pubsub
+         namespace: default
+       spec:
+         type: pubsub.azure.servicebus
+         version: v1
+         metadata:
+           - name: connectionString
+             value: "{connectionString}"
+           - name: consumerID
+             value: "subscription1"
+           - name: disableEntityManagement
+             value: "true"
+       """,
+       ct);
 });
+
+// Use the Redis that 'dapr init' provisions (localhost:6379).
+// That container is always running when Dapr is installed: no TLS, no password.
+// actorStateStore=true elects it as the actor state store; scoped to sub-app-id only
+// so pub-app-id never tries to load it.
+File.WriteAllText(
+    Path.Combine(daprGeneratedPath, "statestore.yaml"),
+    """
+    apiVersion: dapr.io/v1alpha1
+    kind: Component
+    metadata:
+      name: statestore
+      namespace: default
+    spec:
+      type: state.redis
+      version: v1
+      metadata:
+        - name: redisHost
+          value: "localhost:6379"
+        - name: actorStateStore
+          value: "true"
+    scopes:
+      - sub-app-id
+    """);
 
 builder.AddProject<Projects.Pub>("pub")
     .WithDaprSidecar(sidecar =>
@@ -115,10 +88,9 @@ builder.AddProject<Projects.Pub>("pub")
             DaprGrpcPort = 50001,
             DaprHttpPort = 3500,
             MetricsPort = 9090,
-            ResourcesPaths = [generatedPath],
-            PlacementHostAddress = "",
-            LogLevel = "Info",
-            Config = daprConfigPath,
+            ResourcesPaths = [daprConfigPath, daprGeneratedPath],
+            LogLevel = "Debug",
+            Config = daprGlobalConfigFile,
             EnableApiLogging = true
         });
     })
@@ -134,14 +106,13 @@ builder.AddProject<Projects.Sub>("sub")
             DaprGrpcPort = 50002,
             DaprHttpPort = 3501,
             MetricsPort = 9091,
-            ResourcesPaths = [generatedPath],
+            ResourcesPaths = [daprConfigPath, daprGeneratedPath],
             PlacementHostAddress = "localhost:50005",
-            LogLevel = "Info",
-            Config = daprConfigPath,
+            LogLevel = "Debug",
+            Config = daprGlobalConfigFile,
             EnableApiLogging = true
         });
     })
-    .WaitFor(serviceBus)
-    .WaitFor(cache);
+    .WaitFor(serviceBus);
 
 builder.Build().Run();
