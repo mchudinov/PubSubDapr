@@ -107,7 +107,7 @@ builder.AddProject<Projects.Sub>("sub")
             DaprHttpPort = 3501,
             MetricsPort = 9091,
             ResourcesPaths = [daprConfigPath, daprGeneratedPath],
-            PlacementHostAddress = "localhost:50005",
+            PlacementHostAddress = "localhost:6050",
             LogLevel = "Debug",
             Config = daprGlobalConfigFile,
             EnableApiLogging = true
