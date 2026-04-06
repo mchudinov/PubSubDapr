@@ -17,7 +17,8 @@ public class MessageHandlerActor : Actor, IMessageHandlerActor
     public async Task HandleMessageAsync(string message)
     {
         var completed = await StateManager.GetOrAddStateAsync(CompletedSecondsKey, 0);
-        var crashSecond = _random.Next(completed + 1, 4); // crash on one of the remaining seconds (not the last)
+        var willCrash = _random.NextDouble() < 0.5;
+        var crashSecond = willCrash ? _random.Next(completed + 1, 4) : -1; // crash on one of the remaining seconds (not the last)
 
         _logger.LogInformation("Actor {ActorId} resuming message '{Message}' from second {From}/4",
             Id.GetId(), message, completed + 1);
@@ -31,8 +32,8 @@ public class MessageHandlerActor : Actor, IMessageHandlerActor
                 await StateManager.SetStateAsync(CompletedSecondsKey, second - 1);
                 await StateManager.SaveStateAsync();
 
-                _logger.LogError("Actor {ActorId} crashed at second {Second}/4 — disappearing!", Id.GetId(), second);
-                throw new Exception("Ah! Oh! Crash!");
+                _logger.LogError("Actor {ActorId} crashed at second {Second}/4 — crashed!", Id.GetId(), second);
+                throw new Exception("Exception: Ah! Oh! Crash!");
             }
 
             _logger.LogInformation("Actor {ActorId} processing second {Second}/4", Id.GetId(), second);

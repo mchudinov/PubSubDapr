@@ -1,20 +1,23 @@
 apiVersion: dapr.io/v1alpha1
 kind: Resiliency
 metadata:
-  name: pubsub-resiliency
+  name: resiliency
 spec:
-  # 1. Define the policies
   policies:
     retries:
+      actorRetry:
+        policy: constant
+        duration: 0s
+        maxRetries: 3
+
       pubsubRetry:
         policy: exponential
         duration: 5s
         maxInterval: 60s
         maxRetries: 5
-    
+
     timeouts:
-      pubsubTimeout:
-        duration: 30s
+      pubsubTimeout: 30s
 
     circuitBreakers:
       pubsubCB:
@@ -23,10 +26,14 @@ spec:
         timeout: 30s
         trip: consecutiveFailures >= 5
 
-  # 2. Apply policies to the pub/sub component
   targets:
+    actors:
+      MessageHandlerActor:
+        retry: actorRetry
+
     components:
-      my-pubsub: # Must match the 'name' in your pubsub component spec
-        retry: pubsubRetry
-        timeout: pubsubTimeout
-        circuitBreaker: pubsubCB
+      servicebus_pubsub:
+        outbound:
+          retry: pubsubRetry
+          timeout: pubsubTimeout
+          circuitBreaker: pubsubCB
