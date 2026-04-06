@@ -1,0 +1,97 @@
+<mxfile host="Claude">
+  <diagram name="Data Flow">
+    <mxGraphModel dx="1200" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="PubSubDapr — Data Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- AppHost Zone -->
+        <mxCell id="apphost_bg" value="Aspire AppHost" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;verticalAlign=top;opacity=60;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="apphost" value="Orchestrator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="60" y="115" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pubsub_yaml" value="pubsub.yaml (generated)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="185" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Publisher Zone -->
+        <mxCell id="pub_bg" value="Publisher (Pub/)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;verticalAlign=top;opacity=60;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="220" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="pub_worker" value="PublisherWorker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="300" y="115" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pub_detail" value="- Bogus phrase (IngVerb + Noun)&#xa;- Every 5s" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="305" y="170" width="185" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="pub_sidecar" value="Dapr Sidecar&#xa;gRPC:50001  HTTP:3500" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="300" y="210" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Service Bus Zone -->
+        <mxCell id="asb_bg" value="Azure Service Bus Emulator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;fontStyle=1;verticalAlign=top;opacity=60;" vertex="1" parent="1">
+          <mxGeometry x="560" y="100" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="asb" value="Emulator :55555" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="575" y="135" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="asb_topic" value="topic1 / subscription1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="575" y="205" width="170" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subscriber Zone -->
+        <mxCell id="sub_bg" value="Subscriber (Sub/)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;verticalAlign=top;opacity=60;" vertex="1" parent="1">
+          <mxGeometry x="820" y="80" width="220" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="sub_sidecar" value="Dapr Sidecar&#xa;gRPC:50002  HTTP:3501" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="835" y="115" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="sub_controller" value="TopicController&#xa;POST /topic1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="835" y="185" width="185" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="actor" value="MessageHandlerActor&#xa;(processes 4s, may crash)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="835" y="255" width="185" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="redis" value="Redis (Actor State)&#xa;localhost:6379" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="835" y="330" width="185" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Resiliency Zone -->
+        <mxCell id="resiliency_bg" value="Resiliency (resiliency.yaml)&#xa;Actor: constant retry x3 — reactivate + resume from saved second&#xa;PubSub: exponential retry x5, timeout 30s, circuit breaker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="560" y="400" width="480" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="a1" value="PublishEventAsync" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#9673a6;strokeWidth=2;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pub_worker" target="pub_sidecar" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="AMQP" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pub_sidecar" target="asb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" value="Push delivery" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="asb" target="sub_sidecar" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#82b366;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="sub_sidecar" target="sub_controller" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5" value="HandleMessageAsync" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=12;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="sub_controller" target="actor" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a6" value="SaveState / GetState" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#b85450;strokeWidth=2;fontSize=12;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="actor" target="redis" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a7" value="generates" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6c8ebf;strokeWidth=1;strokeDasharray=4;fontSize=12;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="apphost" target="pubsub_yaml" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

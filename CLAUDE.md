@@ -71,4 +71,4 @@ The endpoint reads `HttpRequest.Body` directly (not `[FromBody]`) to avoid conte
 ## Rules
 
 1. Always use Context7 when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
-2. Always use excalidraw MCP when I need to draw a diagram.
+2. Always use drawio MCP when I need to draw any diagram.
