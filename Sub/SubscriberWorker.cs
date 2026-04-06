@@ -13,10 +13,4 @@ public class SubscriberWorker(
         _logger.LogInformation("Subscriber is ready for messages.");
         return Task.CompletedTask;
     }
-
-    public Task HandleMessageAsync(string message)
-    {
-        _logger.LogInformation("Received message from topic: {Message}", message);
-        return Task.CompletedTask;
-    }
 }

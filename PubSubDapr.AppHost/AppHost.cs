@@ -15,7 +15,9 @@ topic1.AddServiceBusSubscription("subscription1");
 // Add the Service Bus Emulator UI
 builder.AddAsbEmulatorUi("asb-ui", serviceBus);
 
-var cache = builder.AddRedis("cache");
+var cache = builder.AddRedis("cache")
+    .WithRedisInsight()
+    .WithRedisCommander();
 
 var daprPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr\\components");
 var daprConfigPath = Path.Combine(daprPath, "global.yaml");
@@ -29,6 +31,51 @@ Directory.CreateDirectory(generatedPath);
 // daprd reads it. The full connection string including 'UseDevelopmentEmulator=true'
 // is required so Dapr's Go Azure SDK connects without TLS to the local emulator
 // (azure-sdk-for-go/azservicebus v1.7.0+ supports the flag; Dapr 1.14+ ships with it).
+// Generate statestore.yaml for Redis so Dapr actors can persist state.
+// actorStateStore=true elects this as the actor state store.
+builder.Eventing.Subscribe<BeforeResourceStartedEvent>(cache.Resource, async (_, ct) =>
+{
+    var cs = await cache.Resource.ConnectionStringExpression.GetValueAsync(ct);
+    if (cs is null) return;
+
+    // Aspire Redis connection string: "host:port,password=xxx,ssl=true,..."
+    // Dapr Redis component expects host:port, password, and enableTLS as separate fields.
+    var segments = cs.Split(',');
+    var redisHost = segments[0];
+    var kvPairs = segments.Skip(1)
+        .Select(p => p.Split('=', 2))
+        .Where(kv => kv.Length == 2)
+        .ToDictionary(kv => kv[0].ToLowerInvariant(), kv => kv[1]);
+    var redisPassword = kvPairs.GetValueOrDefault("password", "");
+    var enableTls = kvPairs.GetValueOrDefault("ssl", "false")
+        .Equals("true", StringComparison.OrdinalIgnoreCase) ? "true" : "false";
+
+    await File.WriteAllTextAsync(
+        Path.Combine(generatedPath, "statestore.yaml"),
+        $"""
+        apiVersion: dapr.io/v1alpha1
+        kind: Component
+        metadata:
+          name: statestore
+          namespace: default
+        spec:
+          type: state.redis
+          version: v1
+          metadata:
+            - name: redisHost
+              value: "{redisHost}"
+            - name: redisPassword
+              value: "{redisPassword}"
+            - name: enableTLS
+              value: "{enableTls}"
+            - name: actorStateStore
+              value: "true"
+        scopes:
+          - sub-app-id
+        """,
+        ct);
+});
+
 builder.Eventing.Subscribe<BeforeResourceStartedEvent>(serviceBus.Resource, async (_, ct) =>
 {
     var connectionString = await serviceBus.Resource.ConnectionStringExpression.GetValueAsync(ct);
@@ -86,12 +133,13 @@ builder.AddProject<Projects.Sub>("sub")
             DaprHttpPort = 3501,
             MetricsPort = 9091,
             ResourcesPaths = [generatedPath],
-            PlacementHostAddress = "",
+            PlacementHostAddress = "localhost:50005",
             LogLevel = "Info",
             Config = daprConfigPath,
             EnableApiLogging = true
         });
     })
-    .WaitFor(serviceBus);
+    .WaitFor(serviceBus)
+    .WaitFor(cache);
 
 builder.Build().Run();

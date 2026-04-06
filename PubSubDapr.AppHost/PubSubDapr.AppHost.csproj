@@ -15,6 +15,7 @@
     <PackageReference Include="AJP.Aspire.Hosting.AsbEmulatorUi" Version="1.0.24" />
     <PackageReference Include="Aspire.Hosting.AppHost" Version="13.2.1" />
     <PackageReference Include="Aspire.Hosting.Azure.ServiceBus" Version="13.2.1" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="13.2.1" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Dapr" Version="13.0.0" />
   </ItemGroup>
 

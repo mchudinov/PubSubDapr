@@ -10,9 +10,6 @@ spec:
       endpointAddress: "http://localhost:18889"
   metrics:
     enabled: true
-  # features:
-  # - name: Workflow
-  #   enabled: true
   accessControl:    
     policies:
     - appId: pub-app-id
