@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Bogus;
 using PubSubDapr.ServiceDefaults;
 
 namespace Pub;
@@ -30,7 +31,9 @@ public class PublisherWorker(
                 { "cloudevent.traceparent", traceParent }
             };
 
-            var message = "Hello world!";
+            var faker = new Faker();
+            var ingVerb = faker.Hacker.IngVerb();
+            var message = $"{char.ToUpper(ingVerb[0])}{ingVerb[1..]} {faker.Hacker.Noun()}";
 
             await _daprClient.PublishEventAsync("servicebus_pubsub", "topic1", message, metadata);
 
