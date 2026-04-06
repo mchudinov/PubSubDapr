@@ -1,4 +1,5 @@
-﻿using PubSubDapr.ServiceDefaults;
+﻿using System.Diagnostics;
+using PubSubDapr.ServiceDefaults;
 
 namespace Pub;
 
@@ -18,8 +19,22 @@ public class PublisherWorker(
 
         try
         {
-            await _daprClient.PublishEventAsync("servicebus_pubsub", "topic1", "Hello world!");
-            _logger.LogInformation("Message 'Hello world' published to service bus.");
+            // Generate a manual W3C traceparent (format: 00-traceid-spanid-flags)
+            // Example: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+            var traceId = ActivityTraceId.CreateRandom().ToHexString();
+            var spanId = ActivitySpanId.CreateRandom().ToHexString();
+            var traceParent = $"00-{traceId}-{spanId}-01";
+            var metadata = new Dictionary<string, string>
+            {
+                { "cloudevent.traceid", traceId },
+                { "cloudevent.traceparent", traceParent }
+            };
+
+            var message = "Hello world!";
+
+            await _daprClient.PublishEventAsync("servicebus_pubsub", "topic1", message, metadata);
+
+            _logger.LogInformation("Message '{Message}' published with Trace ID: {TraceId}.", message, traceId);
         }
         catch (Exception ex)
         {
