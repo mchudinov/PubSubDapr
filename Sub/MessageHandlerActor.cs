@@ -15,7 +15,7 @@ public class MessageHandlerActor : Actor, IMessageHandlerActor
     public Task HandleMessageAsync(string message)
     {
         _logger.LogInformation(
-            "Actor {ActorId} received message: {Message}",
+            "Actor {ActorId} handled message: {Message}",
             Id.GetId(),
             message);
         return Task.CompletedTask;
