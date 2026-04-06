@@ -51,8 +51,6 @@ public class Program
             {
                 options.Actors.RegisterActor<MessageHandlerActor>();
             });
-            builder.Services.AddSingleton<SubscriberWorker>();
-            builder.Services.AddHostedService(sp => sp.GetRequiredService<SubscriberWorker>());
 
             var app = builder.Build();
             app.MapDefaultEndpoints();
