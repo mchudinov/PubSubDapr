@@ -28,8 +28,8 @@ set -euo pipefail
 SUBSCRIPTION=""
 LOCATION="westeurope"
 APP_NAME="pubsubdapr"
-PUBLISHER_IMAGE=""
-SUBSCRIBER_IMAGE=""
+PUBLISHER_IMAGE="chudinov/pubsubdapr-pub:latest"
+SUBSCRIBER_IMAGE="chudinov/pubsubdapr-sub:latest"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -45,9 +45,7 @@ done
 
 # Validate required args
 missing=()
-[[ -z "$SUBSCRIPTION" ]]     && missing+=("--subscription")
-[[ -z "$PUBLISHER_IMAGE" ]]  && missing+=("--publisher-image")
-[[ -z "$SUBSCRIBER_IMAGE" ]] && missing+=("--subscriber-image")
+[[ -z "$SUBSCRIPTION" ]] && missing+=("--subscription")
 
 if [[ ${#missing[@]} -gt 0 ]]; then
   echo "Error: missing required arguments: ${missing[*]}" >&2
