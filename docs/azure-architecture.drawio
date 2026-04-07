@@ -1,0 +1,76 @@
+<mxfile host="65bd71144e">
+    <diagram id="tFEA748hFqQExyw0_eoL" name="Page-1">
+        <mxGraphModel dx="994" dy="1030" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="10" value="Azure Service Bus" style="shape=mxgraph.azure2.service_bus;sketch=0;html=1;pointerEvents=1;dashed=0;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="310" width="65" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="topic1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="475" y="395" width="115" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Publisher&#xa;Container App" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;arcSize=5;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="270" width="220" height="165" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="Publisher container" style="shape=mxgraph.azure2.container_apps;sketch=0;html=1;pointerEvents=1;dashed=0;fillColor=#0072C6;strokeColor=none;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;" parent="20" vertex="1">
+                    <mxGeometry x="30" y="50" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/other/Worker_Container_App.svg;" vertex="1" parent="20">
+                    <mxGeometry x="10" y="-6" width="47.39" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Dapr Sidecar" style="shape=mxgraph.kubernetes.dapr;sketch=0;html=1;pointerEvents=1;dashed=0;fillColor=#00B4E6;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="20" vertex="1">
+                    <mxGeometry x="150" y="55" width="45" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="publish" style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="20" source="21" target="22">
+                    <mxGeometry x="0.1414" y="-1" relative="1" as="geometry">
+                        <mxPoint x="30" y="300" as="sourcePoint"/>
+                        <mxPoint x="240" y="300" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="30" value="Subscriber&#xa;Container App" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;arcSize=5;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="270" width="235" height="165" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="Subscriber container" style="shape=mxgraph.azure2.container_apps;sketch=0;html=1;pointerEvents=1;dashed=0;fillColor=#0072C6;strokeColor=none;strokeWidth=2;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;" parent="30" vertex="1">
+                    <mxGeometry x="160" y="47.5" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="Dapr Sidecar" style="shape=mxgraph.kubernetes.dapr;sketch=0;html=1;pointerEvents=1;dashed=0;fillColor=#00B4E6;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="30" vertex="1">
+                    <mxGeometry x="30" y="50" width="50" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="pull " style="rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;strokeWidth=2;startArrow=classic;startFill=1;" edge="1" parent="30" source="32" target="31">
+                    <mxGeometry x="0.3846" relative="1" as="geometry">
+                        <mxPoint x="-185" y="83" as="sourcePoint"/>
+                        <mxPoint x="40" y="83" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/other/Worker_Container_App.svg;" vertex="1" parent="30">
+                    <mxGeometry x="187.61" y="-6" width="47.39" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="publish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#6c8ebf;strokeWidth=2;" parent="1" source="22" target="10" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="460" y="343"/>
+                            <mxPoint x="460" y="343"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="41" value="pull (streaming)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#82b366;strokeWidth=2;startArrow=classic;startFill=1;" parent="1" source="10" target="32" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="620" y="343"/>
+                            <mxPoint x="620" y="343"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="50" value="PubSubDapr — Azure Architecture" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="210" width="420" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Service_Bus.svg;" vertex="1" parent="1">
+                    <mxGeometry x="507.5" y="315" width="50" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
