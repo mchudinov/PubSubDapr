@@ -7,7 +7,7 @@ spec:
     retries:
       actorRetry:
         policy: constant
-        duration: 0s
+        duration: 1s
         maxRetries: 3
 
       pubsubRetry:
