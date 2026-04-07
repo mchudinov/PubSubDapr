@@ -53,7 +53,7 @@
         <mxCell id="sub_sidecar" value="Dapr Sidecar&#xa;gRPC:50002  HTTP:3501" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
           <mxGeometry x="835" y="115" width="185" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="sub_controller" value="TopicController&#xa;POST /topic1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+        <mxCell id="sub_controller" value="SubscriberWorker&#xa;(BackgroundService)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
           <mxGeometry x="835" y="185" width="185" height="50" as="geometry" />
         </mxCell>
         <mxCell id="actor" value="MessageHandlerActor&#xa;(processes 4s, may crash)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
@@ -75,7 +75,7 @@
         <mxCell id="a2" value="AMQP" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="pub_sidecar" target="asb" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a3" value="Push delivery" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="asb" target="sub_sidecar" parent="1">
+        <mxCell id="a3" value="Pull (streaming)" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=12;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="asb" target="sub_sidecar" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="a4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#82b366;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="sub_sidecar" target="sub_controller" parent="1">

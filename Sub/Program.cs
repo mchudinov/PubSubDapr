@@ -1,5 +1,4 @@
-using Dapr.Actors;
-using Dapr.Actors.Client;
+using Dapr.Messaging.PublishSubscribe.Extensions;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
@@ -46,7 +45,8 @@ public class Program
             builder.Logging.AddSerilog(logger);
 
             builder.AddServiceDefaults();
-            builder.Services.AddControllers().AddDapr();
+            builder.Services.AddDaprPubSubClient();
+            builder.Services.AddHostedService<SubscriberWorker>();
             builder.Services.AddActors(options =>
             {
                 options.Actors.RegisterActor<MessageHandlerActor>();
@@ -61,10 +61,7 @@ public class Program
                 app.UseExceptionHandler("/Error");
             }
 
-            app.UseCloudEvents();
-            app.MapSubscribeHandler();
             app.MapActorsHandlers();
-            app.MapControllers();
 
             app.MapGet("/", () => "Subscriber");
 
