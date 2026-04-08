@@ -4,7 +4,7 @@ namespace Sub;
 
 public class MessageHandlerActor : Actor, IMessageHandlerActor
 {
-    private const string CompletedSecondsKey = "completedSeconds";
+    private const string CompletedStepsKey = "completedSteps";
     private static readonly Random _random = Random.Shared;
     private readonly ILogger<MessageHandlerActor> _logger;
 
@@ -16,31 +16,34 @@ public class MessageHandlerActor : Actor, IMessageHandlerActor
 
     public async Task HandleMessageAsync(string message)
     {
-        var completed = await StateManager.GetOrAddStateAsync(CompletedSecondsKey, 0);
+        var completed = await StateManager.GetOrAddStateAsync(CompletedStepsKey, 0);
         var willCrash = _random.NextDouble() < 0.5;
-        var crashSecond = willCrash ? _random.Next(completed + 1, 4) : -1; // crash on one of the remaining seconds (not the last)
+        var totalSteps = 5;
+        int[] crashCandidates = [2, 3, 4];
+        var eligible = crashCandidates.Where(s => s > completed).ToArray();
+        var crashStep = (willCrash && eligible.Length > 0) ? eligible[_random.Next(eligible.Length)] : -1;
 
-        _logger.LogInformation("Actor {ActorId} resuming message '{Message}' from second {From}/4",
-            Id.GetId(), message, completed + 1);
+        _logger.LogInformation("Actor {ActorId} resuming message '{Message}' from step {From}/{TotalSteps}",
+            Id.GetId(), message, completed + 1, totalSteps);
 
-        for (var second = completed + 1; second <= 4; second++)
+        for (var step = completed + 1; step <= totalSteps; step++)
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await Task.Delay(TimeSpan.FromSeconds(2));
 
-            if (second == crashSecond)
+            if (step == crashStep)
             {
-                await StateManager.SetStateAsync(CompletedSecondsKey, second - 1);
+                await StateManager.SetStateAsync(CompletedStepsKey, step - 1);
                 await StateManager.SaveStateAsync();
 
-                _logger.LogError("Actor {ActorId} crashed at second {Second}/4 — crashed!", Id.GetId(), second);
+                _logger.LogError("Actor {ActorId} crashed at step {Step}/{TotalSteps} — crashed!", Id.GetId(), step, totalSteps);
                 throw new Exception("Exception: Ah! Oh! Crash!");
             }
 
-            _logger.LogInformation("Actor {ActorId} processing second {Second}/4", Id.GetId(), second);
+            _logger.LogInformation("Actor {ActorId} processing step {Step}/{TotalSteps}", Id.GetId(), step, totalSteps);
         }
 
         // Reset state so the actor slot is clean for reuse
-        await StateManager.SetStateAsync(CompletedSecondsKey, 0);
+        await StateManager.SetStateAsync(CompletedStepsKey, 0);
         await StateManager.SaveStateAsync();
 
         _logger.LogInformation("Actor {ActorId} finished processing message: '{Message}'", Id.GetId(), message);

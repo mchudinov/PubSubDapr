@@ -9,7 +9,7 @@ public abstract class BaseHostedWorker : IHostedService, IDisposable
 {
     protected readonly ILogger _logger;
     private Timer? _timer;
-    protected int _workerPeriodSeconds = 15;
+    protected int _workerPeriodSeconds = 20;
 
     protected abstract string WorkerName { get; }
 

@@ -7,12 +7,12 @@ spec:
     retries:
       actorRetry:
         policy: constant
-        duration: 1s
+        duration: 2s
         maxRetries: 3
 
       pubsubRetry:
         policy: exponential
-        duration: 5s
+        duration: 10s
         maxInterval: 60s
         maxRetries: 5
 
