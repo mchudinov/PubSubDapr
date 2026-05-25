@@ -1,0 +1,16 @@
+<Project>
+
+  <PropertyGroup>
+    <!--
+      Workarounds for the Linux Mint / Ubuntu noble dotnet-sdk-10.0 packaging:
+        - SDK ships without PrunePackageData (NETSDK1226).
+        - SDK requests Microsoft.NETCore.App.Host.ubuntu.24.04-x64, which isn't
+          on nuget.org (distro-RID apphost packs only ship inside SDK installs)
+          and apt installs the linux-x64 pack to a separate prefix.
+      Disabling the native apphost is fine here — projects run via `dotnet run`.
+    -->
+    <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+    <UseAppHost>false</UseAppHost>
+  </PropertyGroup>
+
+</Project>
