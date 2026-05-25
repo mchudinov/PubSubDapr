@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
 
-namespace PubSubDapr.ServiceDefaults;
+namespace ServiceDefaults;
 
 public abstract class BaseHostedWorker : IHostedService, IDisposable
 {

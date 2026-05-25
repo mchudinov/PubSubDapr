@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Bogus;
-using PubSubDapr.ServiceDefaults;
+using ServiceDefaults;
 
 namespace Pub;
 

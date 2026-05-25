@@ -15,7 +15,7 @@ topic1.AddServiceBusSubscription("subscription1");
 // Add the Service Bus Emulator UI
 builder.AddAsbEmulatorUi("asb-ui", serviceBus);
 
-var daprConfigPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr\\components");
+var daprConfigPath = Path.Combine(Directory.GetCurrentDirectory(), ".dapr", "components");
 var daprGlobalConfigFile = Path.Combine(daprConfigPath, "global.yaml");
 
 // Component files are written here at startup; not tracked in git.
